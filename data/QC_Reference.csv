@@ -1,0 +1,113 @@
+S.NO ,BATCH.NO,BATCH OWNER,ASSIGNED T0,Start Date,End Date,QC Status, Audit  STATUS,REMARKS,Sheeet Metal QC
+1,327,Jothi bash,Aathithya,11/08/2026,11/08/2026,YES,YES,,Yes
+2,455,Aafrin,Jothi bash,11/08/2026,11/08/2026,YES,YES,,
+3,385,Aafrin,Aathithya,12/08/2026,12/08/2026,YES,YES,,
+4,166,Aafrin,Aathithya,12/08/2026,12/08/2026,YES,YES, 529108 P/N has illegal character as revision mismatch with TC & SE.,
+5,384,Jothi bash,Aathithya,11/08/2026,11/08/2026,YES,YES,,
+6,454,Keerthana,Jothi bash,11/08/2026,11/08/2026,YES,YES,,No
+7,220,Naresh,Jothi bash,12/08/2026,12/08/2026,YES,YES,, 
+8,225,Naresh,Jothi bash,12/08/2026,12/08/2026,YES,YES,,No
+9,230,Naresh,Jothi bash,13/08/2026,13/08/2026,YES,YES,"0553767 , 0553768 ,  0556314 , 0556421 , 0559830 P/N has illegal character as revision mismatch with TC & SE.",No
+10,333,Godwin,Naresh,12/08/2026,12/08/2026,YES,YES,,Yes
+11,334,Godwin,Naresh,12/08/2026,12/08/2026,YES,YES,"Link check is missing in Original Folder
+Batch--0334-- total Item number-9--Insight / 7-Sep-26
+3228278--material and reference formula  missing(I have added material formula)
+3228679--material and reference formula  missing
+3228680--material and reference formula  missing
+3228681--material and reference formula  missing
+3229587--material and reference formula  missing--need to add
+3230126--material and reference formula  missing
+3230133--material and reference formula  missing
+0252217-- In spreadsheet mentioned as YES but in folder the CAD file is missing",No
+12,222,Shyam,Jothi bash,13/08/2026,13/08/2026,YES,YES,,
+13,226,Vishnu,Jothi bash,13/08/2026,13/08/2026,YES,YES,,
+14,317,Jothi bash,Naresh,14/08/2026,14/08/2026,YES,YES,"0536974- illegal char
+0536998 - illegal char
+0538133 - illegal char
+0538378 - illegal char",Yes
+15,307,Jothi bash,Naresh,14/08/2026,14/08/2026,YES,YES,"0067461- Illegal char and rev missmatch 
+0376546 - rev missmatch
+0377450 -rev missmatch
+0401565 - rev missmatch
+0441771 - Illegal char and rev missmatch
+0457021 - Illegal char and rev missmatch 
+0463105 - Illegal char and rev missmatch 
+0492658 - rev missmatch
+0495298  - Illegal char and rev missmatch 
+0513104  - Illegal char and rev missmatch 
+0514595  - Illegal char and rev missmatch 
+0515109  - Illegal char and rev missmatch ",
+16,239,Naresh,Jothi bash,14/08/2026,14/08/2026,YES,YES,,Yes
+17,249,Naresh,Jothi bash,14/08/2026,14/08/2026,YES,YES,,Yes
+18,383,Keerthana,Jothi bash,13/08/2026,13/08/2026,YES,YES,"529195 rev missmatch,0537549 data prep tool in action needed it showing red mark need clarity",No
+19,228,Keerthana,Aathithya ,14/08/2026,26/08/2026,Hold,YES,need clarity regarding tc and se pdf compare,No
+20,308,Aafrin,Aathithya,13/08/2026,13/08/2026,YES,YES,,
+21,224,Godwin,Aathithya,12/08/2026,12/08/2026,YES,YES,,No
+22,229,Godwin,Naresh,13/08/2026,17/08/2026,YES,YES,"8-Sep-26 Audit (Insight)
+Link check is missing in Original Folder
+0537319, 0540514 batch-- 229 missing CAD files in batch folder
+0546649--illegal character",No
+23,232,Shyam,Jothi bash,14/08/2026,14/08/2026,YES,YES,,
+24,419,Godwin,Jothi bash,14/08/2026,15/08/2026,YES,YES,"
+Link check is missing in Original FOlder
+0472792- formula missing an Logo R is overlapping-corrected by godwin .For this MOA file not having Assembly files so godwin doesn’t added the formula(3133301,3137937,3137938-filename formula is missing)
+0472792- Corrected all mismatches but even displaying as yellow mark",No
+25,219,Godwin,Jothi bash,17/08/2026,17/08/2026,YES,YES,,No
+26,217,Aafrin,Aathithya,13/08/2026,13/08/2026,YES,YES,,
+27,328,Aafrin,Aathithya,13/08/2026,13/08/2026,YES,YES,,
+28,256,Aafrin,Suchithra,14/08/2026,18/08/2026,YES,YES,,
+29,318,Aafrin,Jothi bash,17/08/2026,18/08/2026,YES,YES,538381  Illegal char ,
+30,186,Godwin,Jothi bash,18/08/2026,19/08/2026,YES,YES,,Yes
+31,37,Vishnu,Jothi bash,19/08/2026,19/08/2026,YES,YES,,
+32,312,Naresh,Jothi bash,18/08/2026,19/08/2026,YES,YES,,Yes
+33,326,Naresh,Jothi bash,18/08/2026,19/08/2026,YES,YES,,
+34,191,Godwin,Suchithra,19/08/2026,,Hold,YES,,
+35,34,Godwin,Aathithya,20/08/2026,20/08/2026,YES,YES,,
+36,48,Shyam,Jothi bash,18/08/2026,18/08/2026,YES,YES,,
+37,382,Shyam ,Jothi bash,18/08/2026,18/08/2026,YES,YES,,
+38,227,Shyam ,Aathithya,19/08/2026,19/08/2026,YES,YES,,No
+39,340,Shyam ,Aathithya,19/08/2026,,Hold,YES,RERUN due  to client  update,
+40,206,Aafrin,Aathithya,20/08/2026,20/08/2026,YES,YES,Sheet Metal,
+41,223,Keerthana,Aathithya,21/08/2026,21/08/2026,YES,YES,3044350  Illegal char,
+42,332,Keerthana,Jothi bash,21/08/2026,21/08/2026,YES,YES,Completed,Yes
+43,381,Vishnu,Aathithya ,20/08/2026,20/08/2026,YES,YES,,
+44,233,Keerthana,Aathithya ,21/08/2026,27/08/2026,YES,YES,,No
+45,176,Jothi Bash,Aathithya ,01/09/2026,01/09/2026,Yes,YES,,
+46,345,Godwin,Aathithya ,02/09/2026,04/09/2026,Yes,YES,,
+47,97,Naresh,Jothi bash,27/08/2026,27/08/2026,YES,YES,,
+48,186,Godwin,Aathithya ,01/09/2026,01/09/2026,Yes,YES,,
+49,201,Vishnu,Jothi bash,03/09/2026,03/09/2026,YES,YES,,
+50,211,Naresh,Suchitra,09/02/2026,09/02/2026,YES,YES,,
+51,181,Naresh,Aathithya ,09/03/2026,09/03/2026,YES,YES,,
+52,255,Jothi Bash,Aafrin,09/03/2026,,YES,YES,,
+52,241,Shyam ,Aathithya,09/03/2026,09/03/2026,Yes,YES,,
+52,251,Shyam ,Aathithya ,09/03/2026,09/03/2026,Yes,YES,,
+53,38,Shyam ,Aathithya ,08/09/2026,08/09/2026,Hold,YES,"There is errror in CAD assessment.47 - P/N - .0624 should be there as per TC instead of .0625, ",
+54,345,Shyam ,Aathithya ,08/09/2026,08/09/2026,Yes,YES,,
+55,252,Keerthana,Jothi bash,09/08/2026,,Hold,,PDF,
+56,456,Jothi bash,Aathithya ,08/09/2026,08/09/2026,YES,YES,,
+57,149,Jothi bash,Aathithya ,08/09/2026,08/09/2026,YES,YES,,
+58,160,Naresh,Aathithya ,07/09/2026,07/09/2026,Yes,YES,,
+59,46,Naresh,Aathithya ,08/09/2026,08/09/2026,Yes,YES,,
+60,152,Naresh,Keerthana,,,,,,
+61,476,Naresh,Keerthana,09/09/2026,09/09/2026,Hold,,"Reachin sheet--3001225,30093399-hussmann logo,2402803-remove the blank box,3146430,3146431-perfect but displaying in yellow color
+missing parts- 3010585,3029504,3097560",
+62,242,Keerthana,Aathithya ,,,,,,
+63,274,Aafrin,Aathithya ,,,,,,
+64,105,Vishnu,Aathithya ,,,,,,
+65,250,Vishnu,Aathithya ,,,,,,
+66,324,Vishnu,Aathithya ,,,,,,
+67,196,Vishnu,Jothi bash,,,,,,
+68,47,Vishnu,Jothi bash,,,,,,
+69,48,Vishnu,Jothi bash,,,,,,
+70,109,Godwin,Keerthana,,,,,,
+71,238,Godwin,Keerthana,,,,,,
+72,248,Godwin,Keerthana,,,,,,
+73,440,Godwin,Keerthana,,,,,,
+74,441,Godwin,Keerthana,,,,,,
+75,68,Godwin,Keerthana,,,,,,
+76,61,Godwin,Keerthana,,,,,,
+77,403,Godwin,Keerthana,,,,,,
+78,457,Godwin,Keerthana,,,,,,
+79,,,,,,,,,
+80,,,,,,,,,
