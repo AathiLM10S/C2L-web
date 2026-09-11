@@ -1,8 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DailyTracker, User, api } from "@/lib/api";
 import { useAuth } from "@/lib/AuthContext";
+
+function getLocalTodayString(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
 import {
   Search,
   Plus,
@@ -54,14 +62,19 @@ export function DailyTrackerView({
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<"create" | "edit">("create");
   const [editingTrackerId, setEditingTrackerId] = useState<number | null>(null);
-  const [formDate, setFormDate] = useState(new Date().toISOString().split("T")[0]);
+  const [todayStr, setTodayStr] = useState<string>(() => getLocalTodayString());
+
+  useEffect(() => {
+    setTodayStr(getLocalTodayString());
+  }, []);
+
+  const [formDate, setFormDate] = useState<string>(() => getLocalTodayString());
   const [formPhase1, setFormPhase1] = useState("");
   const [formPhase2, setFormPhase2] = useState("");
   const [formStatus, setFormStatus] = useState("Completed");
   const [submitting, setSubmitting] = useState(false);
   const [notification, setNotification] = useState<string | null>(null);
 
-  const todayStr = "2026-09-10"; // Today's date in tracker context
 
   // Check if current user is owner or admin
   const isOwnerOf = (t: DailyTracker) => {
