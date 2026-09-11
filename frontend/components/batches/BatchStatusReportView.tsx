@@ -44,11 +44,15 @@ export function BatchStatusReportView({
   // Permission: restricted to Admin, Lead, and Jothi Bash
   const nameLower = (user?.name || "").toLowerCase().trim();
   const emailLower = (user?.email || "").toLowerCase().trim();
-  const isBash = nameLower.includes("bash") || emailLower === "jothi.bash@c2l-qc.com";
+  const isBash =
+    nameLower.includes("bash") ||
+    emailLower === "jothibash.n@solidpro-es.com" ||
+    emailLower === "jothi.bash@c2l-qc.com";
   const canManageBatch =
     user?.role === "ADMIN" ||
     user?.role === "LEAD" ||
     isBash ||
+    emailLower === "dharunkumar.j@solidpro-es.com" ||
     emailLower === "admin@c2l-qc.com";
 
   // Notifications

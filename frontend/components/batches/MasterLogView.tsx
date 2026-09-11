@@ -15,8 +15,10 @@ import {
   CheckCircle2,
   PlayCircle,
   Eye,
+  Pencil,
   ShieldCheck,
 } from "lucide-react";
+
 
 interface MasterLogViewProps {
   initialLogs: WorkLog[];
@@ -95,6 +97,51 @@ export function MasterLogView({
       setLogs(data);
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  // Edit Work Log Modal State (Anyone can edit master log entries)
+  const [editingLog, setEditingLog] = useState<WorkLog | null>(null);
+  const [editWorkType, setEditWorkType] = useState("New");
+  const [editStatus, setEditStatus] = useState("IN_PROGRESS");
+  const [editHours, setEditHours] = useState("");
+  const [editStartDate, setEditStartDate] = useState("");
+  const [editEndDate, setEditEndDate] = useState("");
+  const [editAssigneeId, setEditAssigneeId] = useState<string>("");
+  const [editRemarks, setEditRemarks] = useState("");
+  const [submittingEdit, setSubmittingEdit] = useState(false);
+
+  const handleOpenEditLog = (l: WorkLog) => {
+    setEditingLog(l);
+    setEditWorkType(l.work_type || "New");
+    setEditStatus(l.status || "IN_PROGRESS");
+    setEditHours(l.total_hours !== undefined && l.total_hours !== null ? String(l.total_hours) : "");
+    setEditStartDate(l.start_date || "");
+    setEditEndDate(l.end_date || "");
+    setEditAssigneeId(l.assigned_to_id ? String(l.assigned_to_id) : (l.employee?.id ? String(l.employee.id) : ""));
+    setEditRemarks(l.remarks || "");
+  };
+
+  const handleSaveEditLog = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingLog) return;
+    setSubmittingEdit(true);
+    try {
+      await api.updateWorkLog(editingLog.id, {
+        work_type: editWorkType,
+        status: editStatus,
+        total_hours: editHours ? Number(editHours) : undefined,
+        start_date: editStartDate || undefined,
+        end_date: editEndDate || undefined,
+        assigned_to_id: editAssigneeId ? Number(editAssigneeId) : undefined,
+        remarks: editRemarks || undefined,
+      });
+      setEditingLog(null);
+      refreshLogs();
+    } catch (err: any) {
+      alert(err.message || "Failed to update work log");
+    } finally {
+      setSubmittingEdit(false);
     }
   };
 
@@ -262,18 +309,16 @@ export function MasterLogView({
             ))}
           </select>
 
-          {canManageBatch && (
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="px-4 py-2 rounded-xl bg-blue-700 hover:bg-blue-600 text-white font-semibold text-xs flex items-center space-x-1.5 shadow-xs transition-all cursor-pointer"
-            >
-              <Plus className="w-4 h-4" />
-              <span>New Work Log</span>
-            </button>
-          )}
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="px-4 py-2 rounded-xl bg-blue-700 hover:bg-blue-600 text-white font-semibold text-xs flex items-center space-x-1.5 shadow-xs transition-all cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Work Log</span>
+          </button>
 
           <a
-            href="http://127.0.0.1:8000/api/reports/excel"
+            href={`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api"}/reports/excel`}
             target="_blank"
             rel="noopener noreferrer"
             className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs flex items-center space-x-1.5 shadow-2xs transition-colors cursor-pointer"
@@ -353,14 +398,23 @@ export function MasterLogView({
                     <td className="p-3.5 max-w-xs truncate text-slate-500" title={l.remarks || ""}>
                       {l.remarks || "—"}
                     </td>
-                    <td className="p-3.5 text-right" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        onClick={() => setSelectedBatchId(l.batch_id)}
-                        className="p-1.5 rounded-lg text-blue-700 hover:bg-blue-100/60 transition-colors cursor-pointer"
-                        title="View Batch Details"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
+                    <td className="p-3.5 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex items-center justify-end space-x-1">
+                        <button
+                          onClick={() => handleOpenEditLog(l)}
+                          className="p-1.5 rounded-lg text-slate-600 hover:text-blue-700 hover:bg-blue-50 transition-colors cursor-pointer"
+                          title="Edit Work Log"
+                        >
+                          <Pencil className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => setSelectedBatchId(l.batch_id)}
+                          className="p-1.5 rounded-lg text-blue-700 hover:bg-blue-100/60 transition-colors cursor-pointer"
+                          title="View Batch Details"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -382,6 +436,7 @@ export function MasterLogView({
           batchId={selectedBatchId}
           onClose={() => setSelectedBatchId(null)}
           onRefresh={refreshLogs}
+          canEdit={true}
         />
       )}
 
@@ -646,6 +701,135 @@ export function MasterLogView({
           </div>
         </div>
       )}
+
+      {/* Edit Work Log Modal (Available to all team members) */}
+      {editingLog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-blue-700 text-white">
+              <div className="flex items-center space-x-2">
+                <Pencil className="w-4 h-4" />
+                <h3 className="font-bold text-sm">
+                  Edit Work Log: Batch #{editingLog.batch_no || editingLog.batch_id}
+                </h3>
+              </div>
+              <button
+                onClick={() => setEditingLog(null)}
+                className="text-white/80 hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveEditLog} className="p-6 space-y-4 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Assignee</label>
+                  <select
+                    value={editAssigneeId}
+                    onChange={(e) => setEditAssigneeId(e.target.value)}
+                    className="w-full py-2 px-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500"
+                  >
+                    <option value="">Select Assignee</option>
+                    {users.map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Work Type</label>
+                  <select
+                    value={editWorkType}
+                    onChange={(e) => setEditWorkType(e.target.value)}
+                    className="w-full py-2 px-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500"
+                  >
+                    <option value="New">New</option>
+                    <option value="Rework">Rework</option>
+                    <option value="Continue">Continue</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Status</label>
+                  <select
+                    value={editStatus}
+                    onChange={(e) => setEditStatus(e.target.value)}
+                    className="w-full py-2 px-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500"
+                  >
+                    <option value="IN_PROGRESS">In Progress</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="ON_HOLD">On Hold</option>
+                    <option value="YET_TO_START">Yet to Start</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Start Date</label>
+                  <input
+                    type="date"
+                    value={editStartDate}
+                    onChange={(e) => setEditStartDate(e.target.value)}
+                    className="w-full py-2 px-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">End Date</label>
+                  <input
+                    type="date"
+                    value={editEndDate}
+                    onChange={(e) => setEditEndDate(e.target.value)}
+                    className="w-full py-2 px-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Hours Logged</label>
+                <input
+                  type="number"
+                  step="0.5"
+                  placeholder="e.g. 8.0"
+                  value={editHours}
+                  onChange={(e) => setEditHours(e.target.value)}
+                  className="w-full py-2 px-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Remarks</label>
+                <textarea
+                  rows={2}
+                  placeholder="Worklog progress notes..."
+                  value={editRemarks}
+                  onChange={(e) => setEditRemarks(e.target.value)}
+                  className="w-full py-2 px-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div className="pt-2 flex justify-end space-x-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingLog(null)}
+                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submittingEdit}
+                  className="px-4 py-2 rounded-xl bg-blue-700 text-white font-semibold hover:bg-blue-600 disabled:opacity-50 cursor-pointer"
+                >
+                  {submittingEdit ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

@@ -37,13 +37,18 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
   const { user } = useAuth();
   const nameLower = (user?.name || "").toLowerCase().trim();
   const emailLower = (user?.email || "").toLowerCase().trim();
-  const isBash = nameLower.includes("bash") || emailLower === "jothi.bash@c2l-qc.com";
+  const isBash =
+    nameLower.includes("bash") ||
+    emailLower === "jothibash.n@solidpro-es.com" ||
+    emailLower === "jothi.bash@c2l-qc.com";
   const userCanManage =
     user?.role === "ADMIN" ||
     user?.role === "LEAD" ||
     isBash ||
+    emailLower === "dharunkumar.j@solidpro-es.com" ||
     emailLower === "admin@c2l-qc.com";
   const effectiveCanEdit = canEdit !== undefined ? canEdit : userCanManage;
+  const canAddWorkLogs = Boolean(user);
 
   const [batch, setBatch] = useState<Batch | null>(null);
   const [loading, setLoading] = useState(false);
@@ -120,7 +125,7 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
                 <h2 className="text-lg font-bold text-slate-900 tracking-tight">
                   Batch #{batch?.batch_no}
                 </h2>
-                {effectiveCanEdit && !isClientReady ? (
+                {userCanManage && !isClientReady ? (
                   <select
                     value={batch?.work_status || "YET_TO_START"}
                     onChange={async (e) => {
@@ -160,10 +165,10 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
         </div>
 
         {/* Read-Only Notice for Non-Managers */}
-        {!effectiveCanEdit && (
-          <div className="mx-6 mt-4 p-2.5 rounded-xl bg-amber-50/90 border border-amber-200 text-[11px] text-amber-800 flex items-center space-x-2">
-            <Lock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-            <span>Read-only inspection. Batch creation and status modifications are restricted to Admin, Lead, and Jothi Bash.</span>
+        {!userCanManage && (
+          <div className="mx-6 mt-4 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex items-center space-x-2">
+            <Lock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+            <span>Batch status modifications are restricted to Admin, Lead, and Jothi Bash. You can record operational work logs below.</span>
           </div>
         )}
 
@@ -324,7 +329,7 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
                   <span className="text-xs font-bold text-blue-800 uppercase tracking-wider block">
                     Work History & Entries ({batch.work_logs?.length || 0})
                   </span>
-                  {effectiveCanEdit ? (
+                  {canAddWorkLogs ? (
                     <button
                       onClick={() => setShowAddWorkLog(!showAddWorkLog)}
                       className="px-2.5 py-1 rounded-lg bg-blue-700 hover:bg-blue-600 text-white text-[11px] font-semibold flex items-center space-x-1 shadow-xs transition-colors cursor-pointer"

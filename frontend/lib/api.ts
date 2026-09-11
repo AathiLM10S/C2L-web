@@ -326,6 +326,11 @@ export const api = {
       method: "POST",
       body: JSON.stringify(data),
     }),
+  updateWorkLog: (logId: number, data: Partial<WorkLog>) =>
+    apiRequest<WorkLog>(`/c2l/work-logs/${logId}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
 
   // Audits
   getAudits: (params?: Record<string, string | number | undefined>) => {

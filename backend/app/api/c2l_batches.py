@@ -12,7 +12,7 @@ from app.models.c2l_audit import C2LAudit
 from app.models.batch_co_assignment import BatchCoAssignment
 from app.schemas.c2l_batch import (
     C2LBatchOut, C2LBatchDetailOut, C2LBatchCreate, C2LBatchUpdate, 
-    WorkLogOut, WorkLogCreate
+    WorkLogOut, WorkLogCreate, WorkLogUpdate
 )
 from app.core.permissions import get_current_user, require_roles
 from app.services import c2l_service
@@ -138,8 +138,12 @@ def create_new_batch(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """Batch creation is restricted to Admin, Lead, and Jothi Bash."""
-    check_can_manage_batch(current_user)
+    # If batch already exists by batch_no, return it
+    existing = c2l_service.get_batch_by_no(db, batch_in.batch_no.strip())
+    if existing:
+        b_out = C2LBatchOut.model_validate(existing)
+        b_out.is_client_ready = (existing.work_status == "COMPLETED" and existing.audit_status == "PASSED")
+        return b_out
 
     if not batch_in.assigned_to_id:
         batch_in.assigned_to_id = current_user.id
@@ -151,7 +155,7 @@ def create_new_batch(
         db, 
         batch.id, 
         WorkLogCreate(
-            assigned_to_id=current_user.id,
+            assigned_to_id=batch_in.assigned_to_id,
             work_type="New",
             start_date=batch.start_date or datetime.now().strftime("%Y-%m-%d"),
             end_date=batch.end_date,
@@ -164,6 +168,7 @@ def create_new_batch(
     b_out = C2LBatchOut.model_validate(batch)
     b_out.is_client_ready = (batch.work_status == "COMPLETED" and batch.audit_status == "PASSED")
     return b_out
+
 
 @router.put("/batches/{batch_id}", response_model=C2LBatchOut)
 def update_batch_info(
@@ -247,4 +252,41 @@ def get_all_work_logs(
             l_out.location = l.batch.location
         results.append(l_out)
     return results
+
+
+@router.put("/work-logs/{log_id}", response_model=WorkLogOut)
+def update_work_log_entry(
+    log_id: int,
+    log_in: WorkLogUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Work logs in Master Log can be updated by any authenticated team member."""
+    work_log = db.query(C2LBatchWorkLog).filter(C2LBatchWorkLog.id == log_id).first()
+    if not work_log:
+        raise HTTPException(status_code=404, detail="Work log not found")
+
+    for field, value in log_in.model_dump(exclude_unset=True).items():
+        setattr(work_log, field, value)
+
+    # Sync with parent batch if status or remarks changed
+    batch = work_log.batch
+    if batch:
+        if log_in.status:
+            batch.work_status = log_in.status
+        if log_in.remarks:
+            batch.current_remarks = log_in.remarks
+        if log_in.total_hours is not None and batch.work_logs:
+            total_h = sum([l.total_hours or 0.0 for l in batch.work_logs])
+            batch.total_hours = total_h
+
+    db.commit()
+    db.refresh(work_log)
+
+    l_out = WorkLogOut.model_validate(work_log)
+    if work_log.batch:
+        l_out.batch_no = work_log.batch.batch_no
+        l_out.batch_type = work_log.batch.batch_type
+        l_out.location = work_log.batch.location
+    return l_out
 

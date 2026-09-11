@@ -18,6 +18,17 @@ class WorkLogBase(BaseModel):
 class WorkLogCreate(WorkLogBase):
     pass
 
+class WorkLogUpdate(BaseModel):
+    assigned_to_id: Optional[int] = None
+    work_type: Optional[str] = None
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
+    total_hours: Optional[float] = None
+    status: Optional[str] = None
+    qc_status: Optional[str] = None
+    qc_by_id: Optional[int] = None
+    remarks: Optional[str] = None
+
 class WorkLogOut(WorkLogBase):
     id: int
     batch_id: int
