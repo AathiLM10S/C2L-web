@@ -1,25 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F8FAFC;
+  --background: #F6F8FC;
   --foreground: #0F172A;
-  --card-bg: #FFFFFF;
-  --card-border: #E2E8F0;
-  --primary-blue: #1E40AF;
-  --primary-blue-hover: #1D4ED8;
-  --navy-dark: #0A1B33;
+  --surface-primary: #FFFFFF;
+  --surface-secondary: #F8FAFC;
+  --surface-tint: #F0F5FF;
+  --navy-primary: #0F2942;
+  --blue-royal: #1E40AF;
+  --blue-cobalt: #2563EB;
+  --cyan-accent: #0284C7;
+  --border-subtle: #E2E8F0;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #F6F8FC;
+  color: #0F172A;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom crisp enterprise scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -30,4 +36,66 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
+}
+
+/* Premium Surface Utilities */
+.surface-card {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03), 0 3px 10px -2px rgba(15, 23, 42, 0.04);
+}
+
+.surface-elevated {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 4px 16px -2px rgba(15, 41, 66, 0.06), 0 1px 3px 0 rgba(15, 41, 66, 0.02);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.surface-elevated:hover {
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 10px 25px -4px rgba(15, 41, 66, 0.1), 0 2px 6px -1px rgba(15, 41, 66, 0.04);
+  transform: translateY(-1px);
+}
+
+.surface-well {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+}
+
+.surface-blue-tint {
+  background: linear-gradient(135deg, rgba(240, 245, 255, 0.8) 0%, rgba(248, 250, 252, 0.6) 100%);
+  border: 1px solid rgba(191, 219, 254, 0.7);
+}
+
+/* Glassmorphic elements */
+.glass-header {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* Glowing dot indicators */
+.status-dot-emerald {
+  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.15), 0 0 6px 1px rgba(5, 150, 105, 0.3);
+}
+
+.status-dot-blue {
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15), 0 0 6px 1px rgba(37, 99, 235, 0.3);
+}
+
+.status-dot-amber {
+  box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.15), 0 0 6px 1px rgba(217, 119, 6, 0.3);
+}
+
+.status-dot-rose {
+  box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.15), 0 0 6px 1px rgba(225, 29, 72, 0.3);
 }

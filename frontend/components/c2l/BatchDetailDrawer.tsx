@@ -115,14 +115,14 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
     <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/30 backdrop-blur-xs transition-opacity">
       <div className="w-full max-w-2xl h-full bg-white border-l border-slate-200 shadow-2xl flex flex-col text-slate-800 overflow-hidden animate-in slide-in-from-right duration-300">
         {/* Drawer Header */}
-        <div className="p-6 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+        <div className="p-6 border-b border-slate-200/80 bg-white flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center font-bold text-blue-700">
+            <div className="w-11 h-11 rounded-2xl bg-[#0F2942] border border-slate-700/60 flex items-center justify-center font-bold font-mono text-cyan-400 text-sm shadow-xs">
               #{batch?.batch_no || "..."}
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+                <h2 className="text-lg font-bold text-[#0F2942] tracking-tight">
                   Batch #{batch?.batch_no}
                 </h2>
                 {userCanManage && !isClientReady ? (
@@ -138,7 +138,7 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
                         alert(err.message || "Failed to update batch status");
                       }
                     }}
-                    className="text-xs font-semibold px-2 py-0.5 rounded-lg border border-blue-300 bg-blue-50 text-blue-800 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+                    className="text-xs font-semibold px-2.5 py-1 rounded-lg border border-blue-300 bg-blue-50 text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer shadow-xs"
                     title="Change Batch Status (Admin, Lead & Jothi Bash)"
                   >
                     <option value="YET_TO_START">Yet to Start</option>
@@ -150,7 +150,7 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
                   <StatusBadge status={batch?.work_status || ""} />
                 )}
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5 font-medium">
                 {batch?.complexity || "Standard Complexity"} • {batch?.location || "Location Not Specified"}
               </p>
             </div>
@@ -158,7 +158,7 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -166,8 +166,8 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
 
         {/* Read-Only Notice for Non-Managers */}
         {!userCanManage && (
-          <div className="mx-6 mt-4 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex items-center space-x-2">
-            <Lock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+          <div className="mx-6 mt-4 p-3 rounded-2xl bg-[#F0F5FF]/60 border border-blue-200/80 text-[11px] text-blue-900 flex items-center space-x-2 shadow-2xs">
+            <Lock className="w-3.5 h-3.5 text-blue-600 shrink-0" />
             <span>Batch status modifications are restricted to Admin, Lead, and Jothi Bash. You can record operational work logs below.</span>
           </div>
         )}
@@ -181,24 +181,24 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
           ) : batch ? (
             <>
               {/* Lifecycle Progress Timeline */}
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-xs font-bold text-blue-800 uppercase tracking-wider block mb-4">
+              <div className="surface-card p-5 rounded-2xl">
+                <span className="text-[10px] font-bold text-[#0F2942] uppercase tracking-wider block mb-4">
                   Batch Lifecycle Timeline
                 </span>
                 <div className="grid grid-cols-4 gap-2 text-center text-xs">
                   {/* Step 1: Work Started */}
                   <div className="flex flex-col items-center">
                     <div
-                      className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${
+                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
                         batch.start_date
-                          ? "bg-blue-600 text-white"
-                          : "bg-slate-200 text-slate-500"
+                          ? "bg-blue-600 text-white shadow-xs shadow-blue-600/30"
+                          : "bg-slate-100 text-slate-400 border border-slate-200"
                       }`}
                     >
                       1
                     </div>
-                    <span className="font-medium mt-1.5 text-slate-700">Started</span>
-                    <span className="text-[10px] text-slate-500">
+                    <span className="font-semibold mt-2 text-slate-800">Started</span>
+                    <span className="text-[10px] text-slate-500 font-mono">
                       {batch.start_date || "Pending"}
                     </span>
                   </div>
@@ -206,16 +206,16 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
                   {/* Step 2: Work Completed */}
                   <div className="flex flex-col items-center">
                     <div
-                      className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${
+                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
                         batch.work_status === "COMPLETED"
-                          ? "bg-blue-600 text-white"
-                          : "bg-slate-200 text-slate-500"
+                          ? "bg-blue-600 text-white shadow-xs shadow-blue-600/30"
+                          : "bg-slate-100 text-slate-400 border border-slate-200"
                       }`}
                     >
                       2
                     </div>
-                    <span className="font-medium mt-1.5 text-slate-700">Work Done</span>
-                    <span className="text-[10px] text-slate-500">
+                    <span className="font-semibold mt-2 text-slate-800">Work Done</span>
+                    <span className="text-[10px] text-slate-500 font-mono">
                       {batch.work_status === "COMPLETED" ? "Completed" : batch.work_status}
                     </span>
                   </div>
@@ -223,18 +223,18 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
                   {/* Step 3: Audit */}
                   <div className="flex flex-col items-center">
                     <div
-                      className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${
+                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
                         batch.audit_status === "PASSED"
-                          ? "bg-emerald-600 text-white"
+                          ? "bg-emerald-600 text-white shadow-xs shadow-emerald-600/30"
                           : batch.audit_status === "FAILED"
-                          ? "bg-rose-600 text-white"
-                          : "bg-slate-200 text-slate-500"
+                          ? "bg-rose-600 text-white shadow-xs shadow-rose-600/30"
+                          : "bg-slate-100 text-slate-400 border border-slate-200"
                       }`}
                     >
                       3
                     </div>
-                    <span className="font-medium mt-1.5 text-slate-700">Audited</span>
-                    <span className="text-[10px] text-slate-500">
+                    <span className="font-semibold mt-2 text-slate-800">Audited</span>
+                    <span className="text-[10px] text-slate-500 font-mono">
                       {batch.audit_status}
                     </span>
                   </div>
@@ -242,16 +242,16 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
                   {/* Step 4: Client Ready */}
                   <div className="flex flex-col items-center">
                     <div
-                      className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${
+                      className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
                         isClientReady
-                          ? "bg-emerald-600 text-white shadow-sm"
-                          : "bg-slate-200 text-slate-500"
+                          ? "bg-emerald-600 text-white shadow-xs shadow-emerald-600/30"
+                          : "bg-slate-100 text-slate-400 border border-slate-200"
                       }`}
                     >
                       4
                     </div>
-                    <span className="font-medium mt-1.5 text-slate-700">Client Ready</span>
-                    <span className="text-[10px] text-slate-500">
+                    <span className="font-semibold mt-2 text-slate-800">Client Ready</span>
+                    <span className="text-[10px] text-slate-500 font-mono">
                       {isClientReady ? "Approved" : "In Progress"}
                     </span>
                   </div>
@@ -260,42 +260,42 @@ export const BatchDetailDrawer: React.FC<BatchDetailDrawerProps> = ({
 
               {/* Metadata Cards */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-[11px] text-slate-500 flex items-center space-x-1.5">
+                <div className="surface-elevated p-3.5 rounded-2xl">
+                  <span className="text-[11px] text-slate-500 flex items-center space-x-1.5 font-medium">
                     <UserIcon className="w-3.5 h-3.5 text-blue-600" />
                     <span>Primary Assignee</span>
                   </span>
-                  <p className="text-sm font-semibold text-slate-900 mt-1">
+                  <p className="text-sm font-bold text-slate-900 mt-1">
                     {batch.assigned_to?.name || "Unassigned"}
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-[11px] text-slate-500 flex items-center space-x-1.5">
+                <div className="surface-elevated p-3.5 rounded-2xl">
+                  <span className="text-[11px] text-slate-500 flex items-center space-x-1.5 font-medium">
                     <Clock className="w-3.5 h-3.5 text-blue-600" />
                     <span>Total Production Hours</span>
                   </span>
-                  <p className="text-sm font-semibold text-slate-900 mt-1">
+                  <p className="text-sm font-bold text-slate-900 mt-1 font-mono">
                     {batch.total_hours ? `${batch.total_hours} hrs` : "Not recorded"}
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-[11px] text-slate-500 flex items-center space-x-1.5">
+                <div className="surface-elevated p-3.5 rounded-2xl">
+                  <span className="text-[11px] text-slate-500 flex items-center space-x-1.5 font-medium">
                     <MapPin className="w-3.5 h-3.5 text-blue-600" />
                     <span>Location / Group</span>
                   </span>
-                  <p className="text-sm font-semibold text-slate-900 mt-1">
+                  <p className="text-sm font-bold text-slate-900 mt-1">
                     {batch.location || "N/A"}
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-[11px] text-slate-500 flex items-center space-x-1.5">
+                <div className="surface-elevated p-3.5 rounded-2xl">
+                  <span className="text-[11px] text-slate-500 flex items-center space-x-1.5 font-medium">
                     <Calendar className="w-3.5 h-3.5 text-blue-600" />
                     <span>Dates (Start - End)</span>
                   </span>
-                  <p className="text-sm font-semibold text-slate-900 mt-1">
+                  <p className="text-sm font-bold text-slate-900 mt-1 font-mono">
                     {batch.start_date || "—"} to {batch.end_date || "—"}
                   </p>
                 </div>

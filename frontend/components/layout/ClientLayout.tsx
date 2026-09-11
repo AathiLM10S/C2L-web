@@ -16,7 +16,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC]">
+    <div className="flex min-h-screen bg-[#F6F8FC]">
       {/* Sidebar */}
       <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
 
@@ -27,7 +27,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
         }`}
       >
         <Header collapsed={collapsed} onToggleSidebar={() => setCollapsed(!collapsed)} />
-        <main className="flex-1 p-6 md:p-8 overflow-y-auto bg-[#F8FAFC]">
+        <main className="flex-1 p-6 md:p-8 overflow-y-auto bg-[#F6F8FC]">
           {children}
         </main>
       </div>

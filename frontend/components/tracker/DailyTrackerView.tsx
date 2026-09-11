@@ -249,18 +249,18 @@ export function DailyTrackerView({
   return (
     <div className="space-y-6">
       {/* Top Banner & Tab Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-4">
         {/* Navigation Tabs */}
-        <div className="flex items-center space-x-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+        <div className="flex items-center space-x-1.5 bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80">
           <button
             onClick={() => setActiveTab("my-updates")}
             className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeTab === "my-updates"
-                ? "bg-white text-blue-800 shadow-xs border border-slate-200"
+                ? "bg-white text-[#0F2942] shadow-xs border border-slate-200"
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
-            <UserIcon className="w-4 h-4 text-blue-700" />
+            <UserIcon className="w-4 h-4 text-blue-600" />
             <span>My Daily Updates</span>
             <span className="px-2 py-0.2 rounded-full text-[10px] bg-blue-50 text-blue-700 font-extrabold border border-blue-200">
               {myTrackers.length}
@@ -271,7 +271,7 @@ export function DailyTrackerView({
             onClick={() => setActiveTab("team-updates")}
             className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeTab === "team-updates"
-                ? "bg-white text-blue-800 shadow-xs border border-slate-200"
+                ? "bg-white text-[#0F2942] shadow-xs border border-slate-200"
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
@@ -286,7 +286,7 @@ export function DailyTrackerView({
         {/* Primary Action Button */}
         <button
           onClick={() => openCreateModal(todayStr)}
-          className="px-4 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-600 text-white font-semibold text-xs flex items-center space-x-2 shadow-xs transition-all cursor-pointer self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-700 to-indigo-600 hover:from-blue-600 hover:to-indigo-500 text-white font-semibold text-xs flex items-center space-x-2 shadow-xs transition-all cursor-pointer self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           <span>Log Daily Tasks</span>
@@ -313,23 +313,23 @@ export function DailyTrackerView({
           {/* 1. HERO CARD: TODAY'S UPDATE */}
           <div>
             <div className="flex items-center space-x-2 mb-3">
-              <Sparkles className="w-4 h-4 text-blue-700" />
-              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+              <Sparkles className="w-4 h-4 text-cyan-500" />
+              <h2 className="text-sm font-bold text-[#0F2942] uppercase tracking-wider">
                 Today&apos;s Update ({todayStr})
               </h2>
             </div>
 
             {myTodayUpdate ? (
               /* Already Logged for Today */
-              <div className="p-6 rounded-3xl bg-gradient-to-br from-white via-blue-50/30 to-blue-50/60 border border-blue-200 shadow-sm space-y-4">
+              <div className="p-6 rounded-3xl bg-gradient-to-br from-white via-[#F0F5FF]/40 to-blue-50/50 border border-blue-200/90 shadow-sm space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-blue-100">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-bold text-sm shadow-xs shadow-blue-700/30">
+                    <div className="w-10 h-10 rounded-2xl bg-[#0F2942] text-cyan-400 flex items-center justify-center font-bold text-sm shadow-xs border border-slate-700/50">
                       {user?.name?.slice(0, 2).toUpperCase() || "ME"}
                     </div>
                     <div>
                       <div className="flex items-center space-x-2">
-                        <h3 className="text-base font-bold text-slate-900">
+                        <h3 className="text-base font-bold text-[#0F2942]">
                           {user?.name}&apos;s Log for Today
                         </h3>
                         {getStatusBadge(myTodayUpdate.status)}
@@ -351,9 +351,9 @@ export function DailyTrackerView({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   {/* Phase 1 Box */}
-                  <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-2">
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-2">
                     <div className="flex items-center space-x-1.5 text-blue-700 font-bold uppercase tracking-wider text-[11px]">
-                      <Layers className="w-3.5 h-3.5" />
+                      <Layers className="w-3.5 h-3.5 text-blue-600" />
                       <span>Phase 1 Work / Batches</span>
                     </div>
                     <p className="text-slate-800 leading-relaxed whitespace-pre-line text-xs font-normal">
@@ -362,9 +362,9 @@ export function DailyTrackerView({
                   </div>
 
                   {/* Phase 2 Box */}
-                  <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-2">
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-2">
                     <div className="flex items-center space-x-1.5 text-blue-700 font-bold uppercase tracking-wider text-[11px]">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-blue-700" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                       <span>Phase 2 Work / Batches</span>
                     </div>
                     <p className="text-slate-800 leading-relaxed whitespace-pre-line text-xs font-normal">
@@ -402,29 +402,35 @@ export function DailyTrackerView({
 
           {/* 2. SUMMARY METRICS */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs">
+            <div className="surface-elevated p-4 rounded-2xl">
               <span className="text-xs text-slate-500 font-medium">My Logged Days</span>
-              <div className="text-2xl font-bold text-slate-900 mt-1">{myTrackers.length}</div>
+              <div className="text-2xl font-black text-[#0F2942] tracking-tight mt-1">{myTrackers.length}</div>
             </div>
             <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 shadow-2xs">
               <span className="text-xs text-emerald-800 font-medium">Completed Logs</span>
-              <div className="text-2xl font-bold text-emerald-700 mt-1">
+              <div className="text-2xl font-black text-emerald-700 tracking-tight mt-1">
                 {myTrackers.filter((t) => (t.status || "").toLowerCase().includes("complete")).length}
               </div>
             </div>
             <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200/80 shadow-2xs">
               <span className="text-xs text-blue-800 font-medium">In-Progress Logs</span>
-              <div className="text-2xl font-bold text-blue-700 mt-1">
+              <div className="text-2xl font-black text-blue-700 tracking-tight mt-1">
                 {myTrackers.filter((t) => (t.status || "").toLowerCase().includes("progress")).length}
               </div>
             </div>
-            <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs">
+            <div className="surface-elevated p-4 rounded-2xl">
               <span className="text-xs text-slate-500 font-medium">Today&apos;s Status</span>
               <div className="text-sm font-bold text-slate-900 mt-2">
                 {myTodayUpdate ? (
-                  <span className="text-emerald-700">Logged ({myTodayUpdate.status})</span>
+                  <span className="inline-flex items-center text-emerald-700 font-bold">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 inline-block"></span>
+                    Logged ({myTodayUpdate.status})
+                  </span>
                 ) : (
-                  <span className="text-amber-700">Pending Log</span>
+                  <span className="inline-flex items-center text-amber-700 font-bold">
+                    <span className="w-2 h-2 rounded-full bg-amber-500 mr-1.5 inline-block"></span>
+                    Pending Log
+                  </span>
                 )}
               </div>
             </div>

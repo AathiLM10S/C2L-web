@@ -13,6 +13,11 @@ import {
   ChevronRight,
   Layers,
   ShieldAlert,
+  TrendingUp,
+  Activity,
+  AlertCircle,
+  FileSpreadsheet,
+  CheckCircle,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -48,172 +53,234 @@ export default async function DashboardPage() {
   }
 
   const kpis = data?.kpis;
+  const totalBatches = kpis?.total_batches || 1;
+  const completionRate = Math.round(((kpis?.completed || 0) / totalBatches) * 100);
+  const clientReadyRate = Math.round(((kpis?.client_ready || 0) / totalBatches) * 100);
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
-      {/* Welcome Banner — Enterprise White Card with Rich Royal Blue Accents */}
-      <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 p-6 md:p-8 shadow-xs">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 relative z-10">
-          <div>
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs font-semibold text-blue-800 mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-              <span>Role: {data?.user_role || "LEAD"}</span>
+    <div className="space-y-7 max-w-7xl mx-auto animate-in fade-in duration-300">
+      {/* Executive Hero Banner */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0F2942] via-[#143859] to-[#1E40AF] p-7 md:p-8 text-white shadow-[0_12px_36px_rgba(15,41,66,0.18)] ring-1 ring-white/10">
+        {/* Subtle geometric grid background overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+        <div className="absolute -right-20 -top-20 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -left-10 -bottom-10 w-60 h-60 bg-cyan-500/15 rounded-full blur-2xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div className="space-y-3">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-cyan-200">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 status-dot-blue animate-pulse" />
+              <span>{data?.user_role || "LEAD"} Workspace Active</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight">
               Good day, {data?.user_name || "Team Member"}
             </h1>
-            <p className="text-slate-600 text-sm mt-1 max-w-2xl leading-relaxed">
+
+            <p className="text-blue-100/80 text-xs sm:text-sm max-w-2xl leading-relaxed">
               {data?.is_admin_or_manager
-                ? "Full operations overview: monitor overall batch throughput, audit passes, open QC issues, and client-ready reporting."
-                : "Your personalized workload overview: tracking your active batches, upcoming audit eligibility, and quality remarks."}
+                ? "Full operations command: monitor CAD model cleanup throughput, quality audit clearance, on-hold bottlenecks, and client deliverable readiness."
+                : "Your personal CAD workstation overview: track your assigned batches, log daily updates, and monitor quality inspection clearance."}
             </p>
           </div>
 
-          <div className="flex items-center space-x-3">
+          {/* Quick Action Buttons */}
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Link
               href="/c2l/my-batches"
-              className="px-4 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-600 text-white font-semibold text-xs shadow-sm transition-all flex items-center space-x-1.5"
+              className="px-4 py-2.5 rounded-xl bg-white text-[#0F2942] hover:bg-cyan-50 font-bold text-xs shadow-md transition-all flex items-center space-x-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
             >
-              <span>View My Batches</span>
-              <ArrowUpRight className="w-4 h-4" />
+              <span>My Active Batches</span>
+              <ArrowUpRight className="w-4 h-4 text-blue-700" />
             </Link>
             <Link
-              href="/reports"
-              className="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold text-xs shadow-2xs transition-all flex items-center space-x-1.5"
+              href="/c2l/daily-tracker"
+              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/25 font-semibold text-xs backdrop-blur-md transition-all flex items-center space-x-1.5 cursor-pointer"
             >
-              <span>Generate Report</span>
+              <Clock className="w-3.5 h-3.5" />
+              <span>Today&apos;s Update</span>
             </Link>
           </div>
         </div>
       </div>
 
-      {/* High Priority: QC Reference On-Hold Audits for Corresponding Batch Owners */}
+      {/* Priority Bottleneck Section (If any on-hold audits exist) */}
       <DashboardOnHoldPrioritySection
         onHoldQCReferences={data?.on_hold_qc_references || []}
         myOnHoldQCCount={data?.my_on_hold_qc_count || 0}
         isAdminOrManager={data?.is_admin_or_manager || false}
       />
 
-      {/* KPI Cards Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {/* Total Batches */}
-        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-blue-300 transition-all">
+      {/* Primary KPI Operations Matrix */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total Registry Volume */}
+        <div className="surface-elevated p-5 rounded-2xl relative overflow-hidden group">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Total Batches
             </span>
-            <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-xs border border-blue-200/60">
               <FolderKanban className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-3xl font-black text-slate-900">{kpis?.total_batches ?? 0}</div>
-          <span className="text-[11px] text-slate-500 mt-1 block">Across entire registry</span>
-        </div>
-
-        {/* Completed Work */}
-        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-emerald-300 transition-all">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Work Completed
-            </span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
-              <CheckCircle2 className="w-4 h-4" />
+          <div className="text-3xl font-extrabold text-[#0F2942] tracking-tight">
+            {kpis?.total_batches ?? 0}
+          </div>
+          <div className="mt-3 space-y-1.5">
+            <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+              <div
+                className="bg-blue-600 h-1.5 rounded-full transition-all duration-500"
+                style={{ width: `${Math.min(100, Math.max(10, completionRate))}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-[10px] text-slate-500 font-medium">
+              <span>{kpis?.completed ?? 0} finished</span>
+              <span>{completionRate}% progress</span>
             </div>
           </div>
-          <div className="text-3xl font-black text-emerald-700">{kpis?.completed ?? 0}</div>
-          <span className="text-[11px] text-emerald-600 mt-1 block">Ready for audit check</span>
         </div>
 
-        {/* In Progress */}
-        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs hover:border-blue-300 transition-all">
+        {/* Active Work In-Progress */}
+        <div className="surface-elevated p-5 rounded-2xl relative overflow-hidden group">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700">
               In Progress
             </span>
-            <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
-              <Clock className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200/60">
+              <Activity className="w-4 h-4 animate-pulse" />
             </div>
           </div>
-          <div className="text-3xl font-black text-blue-700">{kpis?.in_progress ?? 0}</div>
-          <span className="text-[11px] text-blue-600 mt-1 block">Active engineering</span>
+          <div className="text-3xl font-extrabold text-blue-700 tracking-tight">
+            {kpis?.in_progress ?? 0}
+          </div>
+          <div className="mt-3 flex items-center space-x-1.5 text-[11px] text-blue-700 font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 status-dot-blue" />
+            <span>Active CAD modeling & cleanup</span>
+          </div>
         </div>
 
-        {/* Client-Ready Highlighted */}
-        <div className="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-200 shadow-xs hover:border-emerald-300 transition-all">
+        {/* Work Completed */}
+        <div className="surface-elevated p-5 rounded-2xl relative overflow-hidden group">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
-              Client Ready
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+              Work Completed
             </span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200/60">
               <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-3xl font-black text-emerald-800">{kpis?.client_ready ?? 0}</div>
-          <span className="text-[11px] text-emerald-700 mt-1 block font-medium">
-            Work Done + Audit Passed
-          </span>
+          <div className="text-3xl font-extrabold text-emerald-700 tracking-tight">
+            {kpis?.completed ?? 0}
+          </div>
+          <div className="mt-3 flex items-center space-x-1.5 text-[11px] text-emerald-700 font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 status-dot-emerald" />
+            <span>Finished & awaiting audit review</span>
+          </div>
+        </div>
+
+        {/* Client Ready (The Gold Standard) */}
+        <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-50/90 via-teal-50/50 to-white border border-emerald-300/80 shadow-[0_4px_16px_-2px_rgba(5,150,105,0.08)] relative overflow-hidden group">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-900">
+              Client Ready
+            </span>
+            <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+              <CheckCircle className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="text-3xl font-black text-emerald-800 tracking-tight">
+            {kpis?.client_ready ?? 0}
+          </div>
+          <div className="mt-3 flex items-center justify-between text-[10px] text-emerald-800 font-semibold">
+            <span>Work Done + Audit Passed</span>
+            <span className="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 font-mono">
+              {clientReadyRate}% of total
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Secondary Metrics Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl bg-white border border-slate-200 flex items-center justify-between shadow-2xs">
+      {/* Secondary Operational Status Strip */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+        <div className="p-4 rounded-xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between">
           <div>
-            <span className="text-[11px] text-slate-500 block font-medium">Yet To Start</span>
-            <span className="text-xl font-bold text-slate-800">{kpis?.yet_to_start ?? 0}</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+              Yet to Start
+            </span>
+            <span className="text-xl font-extrabold text-slate-800 mt-0.5 block">
+              {kpis?.yet_to_start ?? 0}
+            </span>
           </div>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold">Backlog</span>
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold">
+            Backlog
+          </span>
         </div>
 
         <Link
           href="/c2l/batch-status?status=ON_HOLD"
-          className="p-4 rounded-xl bg-amber-50/50 hover:bg-amber-50 border border-amber-200 flex items-center justify-between shadow-2xs hover:border-amber-300 transition-all cursor-pointer"
+          className="p-4 rounded-xl bg-amber-50/70 hover:bg-amber-50 border border-amber-200/90 flex items-center justify-between shadow-2xs transition-all cursor-pointer group"
         >
           <div>
-            <span className="text-[11px] text-amber-800 block font-bold">On Hold Batches</span>
-            <span className="text-xl font-black text-amber-700">{kpis?.on_hold ?? 0}</span>
+            <span className="text-[10px] uppercase font-bold text-amber-800 block tracking-wider">
+              On Hold
+            </span>
+            <span className="text-xl font-extrabold text-amber-700 mt-0.5 block">
+              {kpis?.on_hold ?? 0}
+            </span>
           </div>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 font-bold">
-            Attention Needed
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold border border-amber-300/80 group-hover:bg-amber-200 transition-colors">
+            Attention
           </span>
         </Link>
 
-        <div className="p-4 rounded-xl bg-white border border-slate-200 flex items-center justify-between shadow-2xs">
+        <div className="p-4 rounded-xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between">
           <div>
-            <span className="text-[11px] text-slate-500 block font-medium">Audit Passed</span>
-            <span className="text-xl font-bold text-emerald-700">{kpis?.audit_passed ?? 0}</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+              Audit Passed
+            </span>
+            <span className="text-xl font-extrabold text-emerald-700 mt-0.5 block">
+              {kpis?.audit_passed ?? 0}
+            </span>
           </div>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">Verified</span>
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-bold">
+            Verified
+          </span>
         </div>
 
         <Link
           href="/c2l/log"
-          className="p-4 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 flex items-center justify-between shadow-2xs transition-all cursor-pointer"
+          className="p-4 rounded-xl bg-white hover:bg-blue-50/50 border border-slate-200/90 flex items-center justify-between shadow-2xs transition-all cursor-pointer group"
         >
           <div>
-            <span className="text-[11px] text-slate-500 block font-medium">C2L Master Log</span>
-            <span className="text-xl font-bold text-blue-700">Timesheets</span>
+            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+              Master Log
+            </span>
+            <span className="text-sm font-bold text-blue-700 mt-1 block">
+              Full Timesheet
+            </span>
           </div>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-semibold">Log CSV</span>
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200/70 font-bold group-hover:bg-blue-100">
+            CSV Log
+          </span>
         </Link>
       </div>
 
-      {/* Main Content Grid: Recent Batches & Quick Workflows */}
+      {/* Main Content Grid: Recent Batches & Quick Tools */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Active Batches (2 cols) */}
-        <div className="lg:col-span-2 rounded-2xl bg-white border border-slate-200 p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between">
+        <div className="lg:col-span-2 surface-card p-6 rounded-3xl space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div>
-              <h2 className="text-base font-bold text-slate-900 tracking-tight">
-                Recent / Active Batches
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                Recent Active Batches
               </h2>
-              <p className="text-xs text-slate-500">
-                Click any batch row for full lifecycle details and work logs
+              <p className="text-xs text-slate-500 mt-0.5">
+                Click any row to open drawer with full lifecycle history and QA audit
               </p>
             </div>
             <Link
               href="/c2l/batch-status"
-              className="text-xs font-semibold text-blue-700 hover:text-blue-800 flex items-center space-x-1"
+              className="text-xs font-bold text-blue-700 hover:text-blue-800 flex items-center space-x-1 transition-colors"
             >
               <span>Batch Status Report</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -224,59 +291,61 @@ export default async function DashboardPage() {
         </div>
 
         {/* Quick Operations & Tools (1 col) */}
-        <div className="rounded-2xl bg-white border border-slate-200 p-6 shadow-xs space-y-4 flex flex-col justify-between">
+        <div className="surface-card p-6 rounded-3xl space-y-5 flex flex-col justify-between">
           <div className="space-y-4">
-            <div>
-              <h2 className="text-base font-bold text-slate-900 tracking-tight">
-                C2L Operational Shortcuts
+            <div className="pb-2 border-b border-slate-100">
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                Operational Shortcuts
               </h2>
-              <p className="text-xs text-slate-500">Direct access to CAD workflows</p>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Direct access to core C2L workflows
+              </p>
             </div>
 
             <div className="space-y-2.5">
               <Link
                 href="/c2l/batch-status"
-                className="p-3 rounded-xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200 hover:border-blue-200 flex items-center justify-between transition-all group"
+                className="p-3.5 rounded-2xl bg-[#F8FAFC] hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-200 flex items-center justify-between transition-all group cursor-pointer"
               >
                 <div>
-                  <span className="text-xs font-bold text-slate-900 group-hover:text-blue-700">
+                  <span className="text-xs font-bold text-slate-900 group-hover:text-blue-700 block">
                     C2L Batch Status Report
                   </span>
-                  <p className="text-[11px] text-slate-500">
-                    150+ batch rows with hold/progress filters
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    150+ batches with stage filters & quick status
                   </p>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
               </Link>
 
               <Link
                 href="/c2l/log"
-                className="p-3 rounded-xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200 hover:border-blue-200 flex items-center justify-between transition-all group"
+                className="p-3.5 rounded-2xl bg-[#F8FAFC] hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-200 flex items-center justify-between transition-all group cursor-pointer"
               >
                 <div>
-                  <span className="text-xs font-bold text-slate-900 group-hover:text-blue-700">
+                  <span className="text-xs font-bold text-slate-900 group-hover:text-blue-700 block">
                     C2L Master Log Timesheet
                   </span>
-                  <p className="text-[11px] text-slate-500">
-                    Logged engineering hours & QC reviewers
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Hours, work types & QC reviewer assignments
                   </p>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
               </Link>
 
               <Link
                 href="/c2l/daily-tracker"
-                className="p-3 rounded-xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200 hover:border-blue-200 flex items-center justify-between transition-all group"
+                className="p-3.5 rounded-2xl bg-[#F8FAFC] hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-200 flex items-center justify-between transition-all group cursor-pointer"
               >
                 <div>
-                  <span className="text-xs font-bold text-slate-900 group-hover:text-blue-700">
+                  <span className="text-xs font-bold text-slate-900 group-hover:text-blue-700 block">
                     Daily Task Update Tracker
                   </span>
-                  <p className="text-[11px] text-slate-500">
-                    Personal work logs and daily updates
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Phase 1 & Phase 2 daily task records
                   </p>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
               </Link>
             </div>
           </div>
@@ -284,7 +353,7 @@ export default async function DashboardPage() {
           <div className="pt-4 border-t border-slate-100">
             <Link
               href="/c2l-scenarios"
-              className="w-full py-2 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-blue-700 text-xs font-semibold flex items-center justify-between transition-all"
+              className="w-full py-2.5 px-3.5 rounded-xl bg-blue-50/80 hover:bg-blue-100/70 border border-blue-200/80 text-blue-800 text-xs font-bold flex items-center justify-between transition-all"
             >
               <span>Explore C2L Knowledge Scenarios</span>
               <ChevronRight className="w-4 h-4" />

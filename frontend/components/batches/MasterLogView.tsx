@@ -218,58 +218,66 @@ export function MasterLogView({
   const totalHours = logs.reduce((acc, curr) => acc + (curr.total_hours || 0), 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-in fade-in duration-200">
       {/* KPI Cards Summary */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-              Total C2L Log Entries
+        <div className="surface-elevated p-5 rounded-2xl">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+              Total C2L Entries
             </span>
-            <FileSpreadsheet className="w-4 h-4 text-blue-600" />
+            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
+              <FileSpreadsheet className="w-3.5 h-3.5" />
+            </div>
           </div>
-          <div className="text-2xl font-extrabold text-slate-900">{totalLogs}</div>
-          <span className="text-[10px] text-slate-500">Exact records from C2L_Log.csv</span>
+          <div className="text-2xl sm:text-3xl font-extrabold text-[#0F2942] tracking-tight">{totalLogs}</div>
+          <span className="text-[11px] text-slate-500 mt-1 block">Live operational worklogs</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+        <div className="surface-elevated p-5 rounded-2xl">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">
               Completed Batches
             </span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+            </div>
           </div>
-          <div className="text-2xl font-extrabold text-emerald-700">{completedLogs}</div>
-          <span className="text-[10px] text-emerald-600">Production work signed off</span>
+          <div className="text-2xl sm:text-3xl font-extrabold text-emerald-700 tracking-tight">{completedLogs}</div>
+          <span className="text-[11px] text-emerald-600 mt-1 block">Production work signed off</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700">
+        <div className="surface-elevated p-5 rounded-2xl">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700">
               In Progress
             </span>
-            <PlayCircle className="w-4 h-4 text-blue-600" />
+            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
+              <PlayCircle className="w-3.5 h-3.5" />
+            </div>
           </div>
-          <div className="text-2xl font-extrabold text-blue-700">{inProgressLogs}</div>
-          <span className="text-[10px] text-blue-600">Active design & model cleanup</span>
+          <div className="text-2xl sm:text-3xl font-extrabold text-blue-700 tracking-tight">{inProgressLogs}</div>
+          <span className="text-[11px] text-blue-600 mt-1 block">Active modeling & cleanup</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-700">
-              Total Logged Hours
+        <div className="surface-elevated p-5 rounded-2xl">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700">
+              Logged Effort
             </span>
-            <Clock className="w-4 h-4 text-indigo-600" />
+            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center">
+              <Clock className="w-3.5 h-3.5" />
+            </div>
           </div>
-          <div className="text-2xl font-extrabold text-indigo-700">
+          <div className="text-2xl sm:text-3xl font-extrabold text-indigo-700 tracking-tight">
             {totalHours.toFixed(1)} <span className="text-xs font-semibold text-slate-500">hrs</span>
           </div>
-          <span className="text-[10px] text-indigo-600">Cumulative CAD engineering effort</span>
+          <span className="text-[11px] text-indigo-600 mt-1 block">Cumulative engineering hours</span>
         </div>
       </div>
 
       {/* Action & Filter Bar */}
-      <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="surface-card p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3.5">
         {/* Search */}
         <div className="relative w-full md:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -278,7 +286,7 @@ export function MasterLogView({
             placeholder="Search batch #, staff, location, remarks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white"
+            className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200/90 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white transition-all"
           />
         </div>
 
@@ -287,7 +295,7 @@ export function MasterLogView({
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="py-2 px-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-blue-500 cursor-pointer"
+            className="py-2 px-3 rounded-xl bg-slate-50 border border-slate-200/90 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 cursor-pointer"
           >
             <option value="ALL">All Statuses</option>
             <option value="COMPLETED">Completed</option>
@@ -299,7 +307,7 @@ export function MasterLogView({
           <select
             value={employeeFilter}
             onChange={(e) => setEmployeeFilter(e.target.value)}
-            className="py-2 px-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-blue-500 cursor-pointer"
+            className="py-2 px-3 rounded-xl bg-slate-50 border border-slate-200/90 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-500 cursor-pointer"
           >
             <option value="ALL">All Staff</option>
             {users.map((u) => (
@@ -311,7 +319,7 @@ export function MasterLogView({
 
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-4 py-2 rounded-xl bg-blue-700 hover:bg-blue-600 text-white font-semibold text-xs flex items-center space-x-1.5 shadow-xs transition-all cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-blue-700 hover:bg-blue-600 text-white font-bold text-xs flex items-center space-x-1.5 shadow-xs hover:shadow-sm transition-all cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
           >
             <Plus className="w-4 h-4" />
             <span>New Work Log</span>
@@ -321,7 +329,7 @@ export function MasterLogView({
             href={`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api"}/reports/excel`}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-xs flex items-center space-x-1.5 shadow-2xs transition-colors cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-700 font-semibold text-xs flex items-center space-x-1.5 shadow-2xs transition-colors cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export</span>
@@ -330,27 +338,28 @@ export function MasterLogView({
       </div>
 
       {/* C2L Log Table matching exact C2L_Log.csv */}
-      <div className="rounded-2xl bg-white border border-slate-200 shadow-xs overflow-hidden">
+      <div className="surface-card rounded-3xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold border-b border-slate-200">
+            <thead className="bg-[#F8FAFC] text-slate-500 uppercase text-[10px] font-bold border-b border-slate-200/80">
               <tr>
-                <th className="p-3.5 w-12 text-center">Sl.No</th>
-                <th className="p-3.5">Batch No</th>
-                <th className="p-3.5">Assigned To</th>
-                <th className="p-3.5">Batch Type</th>
-                <th className="p-3.5">Location</th>
-                <th className="p-3.5">Work Type</th>
-                <th className="p-3.5">Dates</th>
-                <th className="p-3.5">Hours</th>
-                <th className="p-3.5">Status</th>
-                <th className="p-3.5">QC Status</th>
-                <th className="p-3.5">QC Reviewer</th>
-                <th className="p-3.5">Remarks</th>
-                <th className="p-3.5 text-right">Action</th>
+                <th className="p-3.5 pl-4 w-12 text-center font-semibold">Sl.No</th>
+                <th className="p-3.5 font-semibold">Batch No</th>
+                <th className="p-3.5 font-semibold">Assigned To</th>
+                <th className="p-3.5 font-semibold">Batch Type</th>
+                <th className="p-3.5 font-semibold">Location</th>
+                <th className="p-3.5 font-semibold">Work Type</th>
+                <th className="p-3.5 font-semibold">Dates</th>
+                <th className="p-3.5 font-semibold">Hours</th>
+                <th className="p-3.5 font-semibold">Status</th>
+                <th className="p-3.5 font-semibold">QC Status</th>
+                <th className="p-3.5 font-semibold">QC Reviewer</th>
+                <th className="p-3.5 font-semibold">Remarks</th>
+                <th className="p-3.5 pr-4 text-right font-semibold">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 bg-white text-slate-700">
+
               {filteredLogs.length > 0 ? (
                 filteredLogs.map((l) => (
                   <tr
