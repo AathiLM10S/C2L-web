@@ -442,6 +442,16 @@ def import_all_csv_data(db: Session, data_dir: Optional[str] = None) -> Dict[str
             ))
             stats["scenarios_seeded"] += 1
 
+    # Auto-seed daily tracker if empty
+    from app.models.daily_tracker import DailyTracker
+    if db.query(DailyTracker).count() == 0:
+        try:
+            from app.db.seed_daily_tracker import seed_daily_tracker_from_csv
+            tracker_count = seed_daily_tracker_from_csv(db)
+            stats["daily_tracker_seeded"] = tracker_count
+        except Exception as e:
+            print(f"Daily tracker seeding note: {e}")
+
     db.commit()
     stats["users_created"] = len(user_cache)
     return stats
